@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>aaa.jpg</file>
+        <file>cross54.png</file>
+        <file>zoom9.png</file>
+        <file>magnifying39.png</file>
+        <file>click.png</file>
+        <file>Xscale_bigger.png</file>
+        <file>Xscale_smaller.png</file>
+    </qresource>
+</RCC>
