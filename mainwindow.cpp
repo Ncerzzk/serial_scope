@@ -217,13 +217,14 @@ void MainWindow::chart_init(){
 void MainWindow::fresh_coms(){
     QStringList coms;
     ui->comboBox->clear();
+    ui->comboBox_baudrate->clear();
     foreach(const QSerialPortInfo &info,QSerialPortInfo::availablePorts()){
         ui->comboBox->addItem(info.portName());
     }
     ui->comboBox_baudrate->addItem("9600");
     ui->comboBox_baudrate->addItem("38400");
     ui->comboBox_baudrate->addItem("115200");
-
+    ui->comboBox_baudrate->addItem("1152000");
     ui->comboBox_baudrate->setCurrentIndex(2);
 }
 void MainWindow::on_pushButton_open_clicked()
