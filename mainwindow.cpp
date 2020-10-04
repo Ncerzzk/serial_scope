@@ -225,6 +225,7 @@ void MainWindow::fresh_coms(){
     ui->comboBox_baudrate->addItem("38400");
     ui->comboBox_baudrate->addItem("115200");
     ui->comboBox_baudrate->addItem("1152000");
+    ui->comboBox_baudrate->addItem("2560000");
     ui->comboBox_baudrate->setCurrentIndex(2);
 }
 void MainWindow::on_pushButton_open_clicked()
