@@ -362,7 +362,7 @@
       <property name="title">
        <string>串口助手</string>
       </property>
-      <layout class="QGridLayout" name="gridLayout_7" columnstretch="1,7,3">
+      <layout class="QGridLayout" name="gridLayout_7" columnstretch="1,6,4">
        <item row="0" column="0">
         <layout class="QVBoxLayout" name="verticalLayout_5">
          <property name="spacing">
@@ -546,7 +546,7 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>389</width>
+              <width>520</width>
               <height>243</height>
              </rect>
             </property>
@@ -577,7 +577,18 @@
                   </attribute>
                   <layout class="QGridLayout" name="gridLayout_5">
                    <item row="0" column="0">
-                    <layout class="QGridLayout" name="gridLayout_4"/>
+                    <layout class="QGridLayout" name="gridLayout_4" columnstretch="0">
+                     <property name="horizontalSpacing">
+                      <number>7</number>
+                     </property>
+                     <item row="0" column="0">
+                      <widget class="QSlider" name="horizontalSlider">
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </item>
                   </layout>
                  </widget>

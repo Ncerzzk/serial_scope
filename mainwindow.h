@@ -35,6 +35,8 @@ private slots:
     void on_pushButton_send_clicked();
     void button_map_slot(int);
     void save();
+    void slider_button_init(int);
+    void slider_value_change(int);
 
     void on_pushButton_clear_clicked();
 

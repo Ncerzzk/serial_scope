@@ -22,6 +22,7 @@
 #include <QSignalMapper>
 #include <QSettings>
 
+
 #include "mychartview.h"
 
 using namespace QtCharts;
@@ -92,30 +93,59 @@ void MainWindow::wave_checkbox_init(){
 }
 
 QList<QLineEdit *> edits;
-QList<QPushButton *> buttons;
+QList<QPushButton *> send_buttons;
+QList<QPushButton *> init_buttons;
+QList<QSlider *>sliders;
+QList<float> sliders_middle_values;
+
 void MainWindow::button_init(){
-    QPushButton * button;
+    QPushButton * send_button;
+    QPushButton * init_button;
     QLineEdit * edit;
+    QSlider * slider;
     QSignalMapper * signal_map=new QSignalMapper(this);
+
+    QSignalMapper * singal_map_init_buttons=new QSignalMapper(this);
+    QSignalMapper * singal_map_sliders_change=new QSignalMapper(this);
+
     for(int i=0;i<7;++i){
         edit=new QLineEdit(this);
-        button=new QPushButton(this);
+        send_button=new QPushButton(this);
+        init_button = new QPushButton(this);
+        slider = new QSlider(Qt::Horizontal,this);
         edits.append(edit);
-        buttons.append(button);
+        send_buttons.append(send_button);
+        sliders.append(slider);
+        sliders_middle_values.append(0);
 
-        button->setText("发送");
+        send_button->setText("发送");
+        init_button->setText("初始化");
         ui->gridLayout_4->addWidget(edit,i,0);
-        ui->gridLayout_4->addWidget(button,i,1);
+        ui->gridLayout_4->addWidget(send_button,i,1);
+        ui->gridLayout_4->addWidget(slider,i,2);
+        ui->gridLayout_4->addWidget(init_button,i,3);
 
-        connect(button,SIGNAL(clicked(bool)),signal_map,SLOT(map()));
-        signal_map->setMapping(button,i);
+        connect(send_button,SIGNAL(clicked(bool)),signal_map,SLOT(map()));
+        connect(init_button,SIGNAL(clicked(bool)),singal_map_init_buttons,SLOT(map()));
+        connect(slider,SIGNAL(valueChanged(int)),singal_map_sliders_change,SLOT(map()));
+
+        signal_map->setMapping(send_button,i);
+        singal_map_init_buttons->setMapping(init_button,i);
+        singal_map_sliders_change->setMapping(slider,i);
     }
+    ui->gridLayout_4->setColumnStretch(0,8);
+    ui->gridLayout_4->setColumnStretch(1,2);
+    ui->gridLayout_4->setColumnStretch(2,2);
+    ui->gridLayout_4->setColumnStretch(3,2);
+    QPushButton * button;
     button=new QPushButton(this);
     button->setText("保存");
     ui->gridLayout_4->addWidget(button);
     //ui->gridLayout_3->addWidget(button);
     connect(button,SIGNAL(clicked(bool)),this,SLOT(save()));
     connect(signal_map,SIGNAL(mapped(int)),this,SLOT(button_map_slot(int)));
+    connect(singal_map_init_buttons,SIGNAL(mapped(int)),this,SLOT(slider_button_init(int)));
+    connect(singal_map_sliders_change,SIGNAL(mapped(int)),this,SLOT(slider_value_change(int)));
 }
 
 void MainWindow::save(){
@@ -141,6 +171,36 @@ void MainWindow::save(){
 
 
     QMessageBox::about(NULL,"提示","保存完毕，如果更改通道数，请重启程序!");
+
+}
+
+void MainWindow::slider_button_init(int i){
+    QString text = edits[i]->text();
+
+    QString pattern("(-?[0-9]+)|(-?\\d+)(\.\\d+)");
+    QRegExp rx(pattern);
+    float num;
+    int pos=rx.indexIn(text,0);
+    if(pos!=-1){
+       num=rx.cap(0).toFloat();
+       sliders[i]->setValue(50);
+       sliders_middle_values[i]=num;
+     }
+}
+
+void MainWindow::slider_value_change(int i){
+    int slider_val=sliders[i]->value();
+    QString text = edits[i]->text();
+    float mid_val =sliders_middle_values[i];
+    float new_val = mid_val+fabs(mid_val)*(slider_val-50.0f)/50.0f;
+    qDebug()<<new_val;
+    QString num_str = QString::number((double)new_val);
+
+
+    QString pattern("(-?[0-9]+)|(-?\\d+)(\.\\d+)");
+    QRegExp rx(pattern);
+
+    edits[i]->setText(text.replace(rx,num_str));
 
 }
 void MainWindow::load(){
