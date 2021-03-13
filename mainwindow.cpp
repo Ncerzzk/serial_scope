@@ -193,7 +193,7 @@ void MainWindow::slider_value_change(int i){
     QString text = edits[i]->text();
     float mid_val =sliders_middle_values[i];
     float new_val = mid_val+fabs(mid_val)*(slider_val-50.0f)/50.0f;
-    qDebug()<<new_val;
+    //qDebug()<<new_val;
     QString num_str = QString::number((double)new_val);
 
 
@@ -248,8 +248,13 @@ void MainWindow::chart_init(){
     axisY->setRange(ui->lineEdit_ymin->text().toFloat(),ui->lineEdit_ymax->text().toFloat());
 
     wave_num=ui->lineEdit_wave_num->text().toInt();
+
+    QStringList colorList = {"red","yellow","blue","black","green","grey","brown","greenyellow","pink","gold","purple"};
     for (int i=0;i<wave_num;++i){
+        QColor color;
         temp=new  QLineSeries(this);
+        color.setNamedColor(colorList[i]);
+        temp->setColor(color);
         m_chart->addSeries(temp);
         series.append(temp);
         temp->setName("Wave"+QString::number(i+1));
@@ -258,7 +263,7 @@ void MainWindow::chart_init(){
         m_chart->setAxisX(axisX,temp);
         m_chart->setAxisY(axisY,temp);
     }
-    QColor color;
+/*
     color.setNamedColor("red");
     series[0]->setColor(color);
     color.setNamedColor("yellow");
@@ -267,7 +272,7 @@ void MainWindow::chart_init(){
     series[2]->setColor(color);
     color.setNamedColor("black");
     series[3]->setColor(color);
-
+*/
 
     ui->verticalLayout->addWidget(chartView);
     m_chart->legend()->setAlignment(Qt::AlignTop);
@@ -284,6 +289,7 @@ void MainWindow::fresh_coms(){
     ui->comboBox_baudrate->addItem("9600");
     ui->comboBox_baudrate->addItem("38400");
     ui->comboBox_baudrate->addItem("115200");
+    ui->comboBox_baudrate->addItem("250000");
     ui->comboBox_baudrate->addItem("1152000");
     ui->comboBox_baudrate->addItem("2560000");
     ui->comboBox_baudrate->setCurrentIndex(2);
@@ -382,7 +388,7 @@ void MainWindow::serial_portRecvMsgEvent()
     rx_buffer.append(temp);
     rx_cnt+=temp.length();
     if(rx_cnt>100){
-        qDebug()<<serial_port->bytesAvailable();
+        //qDebug()<<serial_port->bytesAvailable();
         result=analize(rx_buffer);
         rx_buffer.clear();
         foreach(Frame frame ,result){
@@ -441,7 +447,16 @@ QList<QList<float>> MainWindow::analize(QByteArray bytes){
                 break;
             case 3:break;
             case 4:break;
-            case 5:break;
+            case 5:
+                data_num=data_length/2;
+                for(int data_cnt=0;data_cnt<data_num;++data_cnt){
+                    int16_t temp_int;
+                    memcpy(&temp_int,bytes.data()+i + 4 + data_cnt * 2,2);
+                    temp =20.0f*temp_int/32768.0f;
+                    frame.append(temp);
+                }
+                result.append(frame);
+                break;
             case 6:
                 data_num=data_length/4;
                 for(int data_cnt=0;data_cnt<data_num;++data_cnt){
@@ -468,7 +483,7 @@ QList<QList<float>> MainWindow::analize(QByteArray bytes){
 
 void MainWindow::on_pushButton_clicked()
 {
-    qDebug()<<disp_data[0].length();
+    //qDebug()<<disp_data[0].length();
 }
 
 
@@ -703,6 +718,72 @@ void MainWindow::on_pushButton_save_wave_clicked()
         count++;
     }
     QTextStream textStream(&file);
-    textStream<<text<<"test";
+    textStream<<text;
     file.close();
+}
+
+void MainWindow::on_Experiment_botton_zero_clicked()
+{
+    if(ui->pushButton_open->text()!="关闭串口"){
+        return ;
+    }
+    QString text = ui->Experiment_Fast_lineEdit->text();
+    QString num_str = QString::number(0);
+
+
+    QString pattern("(-?[0-9]+)|(-?\\d+)(\.\\d+)");
+    QRegExp rx(pattern);
+
+    ui->Experiment_Fast_lineEdit->setText(text.replace(rx,num_str));
+
+    QByteArray s=ui->Experiment_Fast_lineEdit->text().toLatin1();
+    if(ui->checkBox_send_newline->isChecked()){
+        s.append('\r');
+        s.append('\n');
+    }
+    serial_port->write(s);
+}
+
+#include<QRandomGenerator>
+
+
+void MainWindow::on_Experiment_button_Random_clicked()
+{
+    float min = ui->Experiment_Random_min_Edit->text().toFloat();
+    float max = ui->Experiment_Random_max_Edit->text().toFloat();
+
+    double rand= QRandomGenerator::global()->bounded(double(max-min));
+
+    QString num_str = QString::number(rand+double(min));
+    QString text = ui->Experiment_Fast_lineEdit->text();
+    QString pattern("(-?[0-9]+)|(-?\\d+)(\.\\d+)");
+    QRegExp rx(pattern);
+
+    ui->Experiment_Fast_lineEdit->setText(text.replace(rx,num_str));
+
+    if(ui->pushButton_open->text()!="关闭串口"){
+        return ;
+    }
+
+    QByteArray s=ui->Experiment_Fast_lineEdit->text().toLatin1();
+    if(ui->checkBox_send_newline->isChecked()){
+        s.append('\r');
+        s.append('\n');
+    }
+    serial_port->write(s);
+
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    if(ui->pushButton_open->text()!="关闭串口"){
+        return ;
+    }
+
+    QByteArray s=ui->Experiment_Fast_lineEdit->text().toLatin1();
+    if(ui->checkBox_send_newline->isChecked()){
+        s.append('\r');
+        s.append('\n');
+    }
+    serial_port->write(s);
 }

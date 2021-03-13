@@ -67,6 +67,12 @@ private slots:
 
     void on_pushButton_save_wave_clicked();
 
+    void on_Experiment_botton_zero_clicked();
+
+    void on_Experiment_button_Random_clicked();
+
+    void on_pushButton_4_clicked();
+
 private:
     void chart_init();
     void fresh_coms();

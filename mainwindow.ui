@@ -569,7 +569,7 @@
                <item row="3" column="0">
                 <widget class="QTabWidget" name="tabWidget_2">
                  <property name="currentIndex">
-                  <number>0</number>
+                  <number>1</number>
                  </property>
                  <widget class="QWidget" name="tab_fast_button">
                   <attribute name="title">
@@ -591,6 +591,93 @@
                     </layout>
                    </item>
                   </layout>
+                 </widget>
+                 <widget class="QWidget" name="tab_2">
+                  <attribute name="title">
+                   <string>实验</string>
+                  </attribute>
+                  <widget class="QPushButton" name="Experiment_botton_zero">
+                   <property name="geometry">
+                    <rect>
+                     <x>10</x>
+                     <y>0</y>
+                     <width>91</width>
+                     <height>21</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>归0</string>
+                   </property>
+                  </widget>
+                  <widget class="QLineEdit" name="Experiment_Fast_lineEdit">
+                   <property name="geometry">
+                    <rect>
+                     <x>120</x>
+                     <y>0</y>
+                     <width>241</width>
+                     <height>21</height>
+                    </rect>
+                   </property>
+                  </widget>
+                  <widget class="QPushButton" name="Experiment_button_Random">
+                   <property name="geometry">
+                    <rect>
+                     <x>10</x>
+                     <y>20</y>
+                     <width>93</width>
+                     <height>28</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>取随机</string>
+                   </property>
+                  </widget>
+                  <widget class="QLineEdit" name="Experiment_Random_min_Edit">
+                   <property name="geometry">
+                    <rect>
+                     <x>120</x>
+                     <y>20</y>
+                     <width>51</width>
+                     <height>21</height>
+                    </rect>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="label_6">
+                   <property name="geometry">
+                    <rect>
+                     <x>180</x>
+                     <y>20</y>
+                     <width>21</width>
+                     <height>16</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>~</string>
+                   </property>
+                  </widget>
+                  <widget class="QLineEdit" name="Experiment_Random_max_Edit">
+                   <property name="geometry">
+                    <rect>
+                     <x>200</x>
+                     <y>20</y>
+                     <width>51</width>
+                     <height>21</height>
+                    </rect>
+                   </property>
+                  </widget>
+                  <widget class="QPushButton" name="pushButton_4">
+                   <property name="geometry">
+                    <rect>
+                     <x>10</x>
+                     <y>50</y>
+                     <width>93</width>
+                     <height>28</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>发送</string>
+                   </property>
+                  </widget>
                  </widget>
                 </widget>
                </item>
